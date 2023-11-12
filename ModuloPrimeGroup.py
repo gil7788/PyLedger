@@ -24,10 +24,22 @@ class ModuloPrimeGroup:
         return self.multiply(other)
 
     def __pow__(self, exponent):
-        return self.exponentiate(exponent)
+        return self.exponentiation(exponent)
 
     def __truediv__(self, other):
         return self.divide(other)
+
+    def __eq__(self, other):
+        return self.value == other.value and self.prime == other.prime
+
+    def __ne__(self, other):
+        return not (self == other)
+
+    def __neg__(self):
+        return ModuloPrimeGroup(-self.value, self.prime)
+
+    def __rmul__(self, coefficient):
+        return self.__class__(coefficient * self.value, self.prime)
 
     def add(self, other):
         if self.prime != other.prime:
@@ -44,7 +56,7 @@ class ModuloPrimeGroup:
             raise ValueError("Operands must be in the same modulo prime group.")
         return ModuloPrimeGroup((self.value * other.value) % self.prime, self.prime)
 
-    def exponentiate(self, exponent):
+    def exponentiation(self, exponent):
         return ModuloPrimeGroup(pow(self.value, exponent, self.prime), self.prime)
 
     def inverse(self):
@@ -57,4 +69,7 @@ class ModuloPrimeGroup:
         return self.multiply(other.inverse())
 
     def __str__(self):
+        return f"Value: {self.value} in Z_{self.prime}"
+
+    def __repr__(self):
         return f"Value: {self.value} in Z_{self.prime}"

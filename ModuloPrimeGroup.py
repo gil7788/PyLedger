@@ -14,6 +14,21 @@ class ModuloPrimeGroup:
                 return False
         return True
 
+    def __add__(self, other):
+        return self.add(other)
+
+    def __sub__(self, other):
+        return self.subtract(other)
+
+    def __mul__(self, other):
+        return self.multiply(other)
+
+    def __pow__(self, exponent):
+        return self.exponentiate(exponent)
+
+    def __truediv__(self, other):
+        return self.divide(other)
+
     def add(self, other):
         if self.prime != other.prime:
             raise ValueError("Operands must be in the same modulo prime group.")

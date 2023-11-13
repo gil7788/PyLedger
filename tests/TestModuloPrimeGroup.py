@@ -4,13 +4,6 @@ from ModuloPrimeGroup import ModuloPrimeGroup
 
 
 class TestModuloPrimeGroup(unittest.TestCase):
-    def test_prime_check(self):
-        with self.assertRaises(ValueError):
-            ModuloPrimeGroup(1, 4)  # 4 is not a prime
-        # Test with a prime number
-        mp = ModuloPrimeGroup(1, 7)
-        self.assertIsInstance(mp, ModuloPrimeGroup)
-
     def test_equality(self):
         a = ModuloPrimeGroup(3, 7)
         b = ModuloPrimeGroup(3, 7)

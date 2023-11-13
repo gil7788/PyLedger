@@ -182,6 +182,11 @@ class TestFinalFieldEllipticCurvePoint(unittest.TestCase):
         R = self.P + negP
         self.assertEqual(R, self.infinity)
 
+    def test_point_scalar_multiplication(self):
+        R = 7 * self.P
+        expected = self.P + self.P + self.P + self.P + self.P + self.P + self.P
+        self.assertEqual(R, expected)
+
     def test_equality_and_inequality(self):
         # Test equality
         self.assertEqual(self.P, self.P)

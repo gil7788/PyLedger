@@ -55,11 +55,7 @@ class EllipticCurvePoint:
 
     def binary_exponentiation(self, exponent):
         result = self.__class__(None, None, self.a, self.b)
-        print(len(bin(exponent)[2:]))
-        i = 0
         for bit in bin(exponent)[2:]:
-            print(i)
-            i+=1
             result += result
             if bit == "1":
                 result += self

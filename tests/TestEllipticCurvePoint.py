@@ -1,6 +1,6 @@
 import unittest
-from EllipticCurvePoint import EllipticCurvePoint
-from ModuloGroup import ModuloGroup
+from src.EllipticCurvePoint import EllipticCurvePoint
+from src.ModuloGroup import ModuloGroup
 
 
 class TestEllipticCurvePointCurve1(unittest.TestCase):

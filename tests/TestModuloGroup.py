@@ -1,6 +1,6 @@
 import unittest
 
-from ModuloGroup import ModuloGroup
+from src.ModuloGroup import ModuloGroup
 
 
 class TestModuloGroup(unittest.TestCase):

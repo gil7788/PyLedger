@@ -1,4 +1,4 @@
-from ModuloGroup import ModuloGroup
+from src.ModuloGroup import ModuloGroup
 import secp256k1_config as secp
 
 

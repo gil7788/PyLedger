@@ -1,6 +1,6 @@
 import unittest
 from EllipticCurvePoint import EllipticCurvePoint
-from ModuloPrimeGroup import ModuloPrimeGroup
+from ModuloGroup import ModuloGroup
 
 
 class TestEllipticCurvePointCurve1(unittest.TestCase):
@@ -103,12 +103,12 @@ class TestFinalFieldEllipticCurvePoint(unittest.TestCase):
     def setUp(self):
         # Common setup for the tests
         self.prime = 17
-        self.a = ModuloPrimeGroup(2, prime=self.prime)
-        self.b = ModuloPrimeGroup(3, prime=self.prime)
-        self.Px = ModuloPrimeGroup(3, prime=self.prime)
-        self.Py = ModuloPrimeGroup(6, prime=self.prime)
-        self.Qx = ModuloPrimeGroup(-1, prime=self.prime)
-        self.Qy = ModuloPrimeGroup(0, prime=self.prime)
+        self.a = ModuloGroup(2, prime=self.prime)
+        self.b = ModuloGroup(3, prime=self.prime)
+        self.Px = ModuloGroup(3, prime=self.prime)
+        self.Py = ModuloGroup(6, prime=self.prime)
+        self.Qx = ModuloGroup(-1, prime=self.prime)
+        self.Qy = ModuloGroup(0, prime=self.prime)
 
         self.P = EllipticCurvePoint(self.Px, self.Py, self.a, self.b)  # A point on the curve
         self.Q = EllipticCurvePoint(self.Qx, self.Qy, self.a, self.b)  # Another point on the curve
@@ -119,8 +119,8 @@ class TestFinalFieldEllipticCurvePoint(unittest.TestCase):
         self.assertTrue(self.P.is_on_curve())
         # Point not on the curve
         with self.assertRaises(ValueError):
-            p_x = ModuloPrimeGroup(2, prime=self.prime)
-            p_y = ModuloPrimeGroup(3, prime=self.prime)
+            p_x = ModuloGroup(2, prime=self.prime)
+            p_y = ModuloGroup(3, prime=self.prime)
             EllipticCurvePoint(p_x, p_y, self.a, self.b)
 
     def test_point_addition(self):
@@ -142,28 +142,28 @@ class TestFinalFieldEllipticCurvePoint(unittest.TestCase):
         p = EllipticCurvePoint(self.Px, self.Py, self.a, self.b)
         q = EllipticCurvePoint(self.Px, self.Py, self.a, self.b)
         R = p + q
-        expected_x = ModuloPrimeGroup(12, prime=self.prime)
-        expected_y = ModuloPrimeGroup(2, prime=self.prime)
+        expected_x = ModuloGroup(12, prime=self.prime)
+        expected_y = ModuloGroup(2, prime=self.prime)
         self.assertEqual(R, EllipticCurvePoint(expected_x, expected_y, self.a, self.b))
 
     def test_point_addition_same_point_y_0(self):
-        p_x = ModuloPrimeGroup(-1, prime=self.prime)
-        p_y = ModuloPrimeGroup(0, prime=self.prime)
+        p_x = ModuloGroup(-1, prime=self.prime)
+        p_y = ModuloGroup(0, prime=self.prime)
         p = EllipticCurvePoint(p_x, p_y, self.a, self.b)
         q = EllipticCurvePoint(p_x, p_y, self.a, self.b)
         R = p + q
         self.assertEqual(R, self.infinity)
 
     def test_point_addition_negative_slope(self):
-        p_x = ModuloPrimeGroup(-1, prime=self.prime)
-        p_y = ModuloPrimeGroup(0, prime=self.prime)
+        p_x = ModuloGroup(-1, prime=self.prime)
+        p_y = ModuloGroup(0, prime=self.prime)
         p = EllipticCurvePoint(p_x, p_y, self.a, self.b)
-        q_y = ModuloPrimeGroup(-6, prime=self.prime)
+        q_y = ModuloGroup(-6, prime=self.prime)
 
         q = EllipticCurvePoint(self.Px, q_y, self.a, self.b)
         R = p + q
-        expected_x = ModuloPrimeGroup(13, prime=self.prime)
-        expected_y = ModuloPrimeGroup(4, prime=self.prime)
+        expected_x = ModuloGroup(13, prime=self.prime)
+        expected_y = ModuloGroup(4, prime=self.prime)
 
         self.assertEqual(R, EllipticCurvePoint(expected_x, expected_y, self.a, self.b))
 

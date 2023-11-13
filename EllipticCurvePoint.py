@@ -1,6 +1,6 @@
 import logging
 
-from ModuloPrimeGroup import ModuloPrimeGroup
+from ModuloGroup import ModuloGroup
 
 
 class EllipticCurvePoint:
@@ -25,7 +25,7 @@ class EllipticCurvePoint:
         if self.is_zero():
             return True
 
-        if isinstance(self.x, ModuloPrimeGroup) and isinstance(self.y, ModuloPrimeGroup):
+        if isinstance(self.x, ModuloGroup) and isinstance(self.y, ModuloGroup):
             return self.y ** 2 == self.x ** 3 + self.a * self.x + self.b
         else:
             return abs(self.y**2 - (self.x**3 + self.a * self.x + self.b)) < tolerance
@@ -34,7 +34,7 @@ class EllipticCurvePoint:
         if self.is_zero():
             return other.is_zero()
 
-        if isinstance(self.x, ModuloPrimeGroup) and isinstance(other.x, ModuloPrimeGroup):
+        if isinstance(self.x, ModuloGroup) and isinstance(other.x, ModuloGroup):
             return self.x == other.x and self.y == other.y
         else:
             return (abs(self.x - other.x) < tolerance) and (abs(self.y - other.y) < tolerance)
@@ -97,16 +97,16 @@ class EllipticCurvePoint:
         """
         Ensure that the value is of the same type as the curve parameters.
         """
-        if isinstance(value, int) and (isinstance(self.x, ModuloPrimeGroup) or isinstance(self.y, ModuloPrimeGroup)):
-            return ModuloPrimeGroup(value, self.x.prime)  # Assuming self.x and self.y have the same prime
+        if isinstance(value, int) and (isinstance(self.x, ModuloGroup) or isinstance(self.y, ModuloGroup)):
+            return ModuloGroup(value, self.x.prime)  # Assuming self.x and self.y have the same prime
         return value
 
     @staticmethod
     def _is_equal_to_zero(value):
         """
-        Check if a value (either int or ModuloPrimeGroup) is equal to zero.
+        Check if a value (either int or ModuloGroup) is equal to zero.
         """
-        if isinstance(value, ModuloPrimeGroup):
+        if isinstance(value, ModuloGroup):
             return value.value == 0
         return value == 0
 

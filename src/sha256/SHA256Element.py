@@ -1,5 +1,5 @@
 from src.ModuloGroup import ModuloGroup
-import secp256k1_config as secp
+import src.sha256.secp256k1_config as secp
 
 
 class SHA256Element(ModuloGroup):

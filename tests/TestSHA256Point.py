@@ -5,7 +5,7 @@ from src.sha256.SHA256Element import SHA256Element
 from src.sha256.SHA256Point import SHA256Point
 
 
-class TestFinalFieldEllipticCurvePointVerification(unittest.TestCase):
+class TestSHA256Point(unittest.TestCase):
     def test_verify_p1(self):
         z = 0xbc62d4b80d9e36da29c16c5d4d9f11731f36052c72401a76c23c0fb5a9b74423
         r = 0x37206a0610995c58074999cb9767b87af4c4978db68c06e8e6e81d282047a7c6
@@ -40,6 +40,14 @@ class TestFinalFieldEllipticCurvePointVerification(unittest.TestCase):
         py_sha = SHA256Element(py)
         p = SHA256Point(px_sha, py_sha)
         return p.verify(z, sig)
+
+    def test_encoding_and_decoding(self):
+        secret = 0xdeadbeef54321
+        g = SHA256Point.get_g()
+        signature = secret * g
+        sec = signature.sec()
+        sec_p = SHA256Point.parse(sec)
+        self.assertEqual(signature, sec_p)
 
 
 if __name__ == '__main__':

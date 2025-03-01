@@ -7,19 +7,20 @@ class Signature:
         self.s = s
 
     def der(self):
-        '''returns the byte serialization of the signature'''
-        # convert r to bytes
-        rb = self.r.to_bytes(32, 'big')
-        # if r negative, add a 0x00
-        if rb[0] >= 0x80:
-            rb = b'\x00' + rb
-        result = bytes([2, len(rb)]) + rb
-        # convert s to bytes
-        sb = self.s.to_bytes(32, 'big')
-        # if s negative, add a 0x00
-        if sb[0] >= 0x80:
-            sb = b'\x00' + sb
-        result += bytes([2, len(sb)]) + sb
+        rbin = self.r.to_bytes(32, byteorder='big')
+        # remove all null bytes at the beginning
+        rbin = rbin.lstrip(b'\x00')
+        # if rbin has a high bit, add a \x00
+        if rbin[0] & 0x80:
+            rbin = b'\x00' + rbin
+        result = bytes([2, len(rbin)]) + rbin
+        sbin = self.s.to_bytes(32, byteorder='big')
+        # remove all null bytes at the beginning
+        sbin = sbin.lstrip(b'\x00')
+        # if sbin has a high bit, add a \x00
+        if sbin[0] & 0x80:
+            sbin = b'\x00' + sbin
+        result += bytes([2, len(sbin)]) + sbin
         return bytes([0x30, len(result)]) + result
 
     @classmethod

@@ -1,4 +1,17 @@
 import hashlib
+from Crypto.Hash import RIPEMD160
+
+
+def ripemd160_hash(data: bytes) -> str:
+    """Compute the RIPEMD-160 hash of the input data securely."""
+    h = RIPEMD160.new()
+    h.update(data)
+    return h.hexdigest()
+
+# Example usage
+data = b"Secure RIPEMD-160 in Python"
+hashed_value = ripemd160_hash(data)
+print("RIPEMD-160 Hash:", hashed_value)
 
 
 def hash256(s):
@@ -7,7 +20,9 @@ def hash256(s):
 
 
 def hash160(s):
-    return hashlib.new('ripemd160', hashlib.sha256(s).digest()).digest()
+    hash_str = ripemd160_hash(hashlib.sha256(s).digest())
+    hash_bytes = bytes.fromhex(hash_str)
+    return hash_bytes
 
 
 def encode_base58_checksum(b):
@@ -40,3 +55,11 @@ def decode_base58(s):
     # Calculate the number of bytes needed
     byte_length = (result.bit_length() + 7) // 8
     return result.to_bytes(byte_length, 'big')
+
+
+def little_endian_to_int(le_bytes):
+    return int.from_bytes(le_bytes, 'little')
+
+
+def int_to_little_endian(val, length):
+    return val.to_bytes(length, 'little')

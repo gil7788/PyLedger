@@ -1,6 +1,7 @@
 from src.EllipticCurvePoint import EllipticCurvePoint
 from src.sha256.SHA256Element import SHA256Element
 import src.sha256.secp256k1_config as secp
+from src.utils.encoding_utils import hash160,encode_base58
 
 
 class SHA256Point(EllipticCurvePoint):
@@ -27,6 +28,19 @@ class SHA256Point(EllipticCurvePoint):
         v = sig.r * s_inv % secp.N
         total = u * self.get_g() + v * self
         return total.x.value == sig.r
+
+    def address(self, compressed=True, testnet=False):
+        address = self.sec_hash160(compressed)
+
+        if testnet:
+            prefix = b"\x6f"  # Correct testnet prefix for Bitcoin addresses
+        else:
+            prefix = b"\x00"  # Correct mainnet prefix for Bitcoin addresses
+
+        return encode_base58(prefix + address)  # Now prefix is bytes, no TypeError
+
+    def sec_hash160(self, compressed=True):
+        return hash160(self.sec(compressed))
 
     def sec(self, compressed=True):
         # returns the binary version of the SEC format

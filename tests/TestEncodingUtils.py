@@ -1,5 +1,5 @@
 import unittest
-
+from io import BytesIO
 from src.utils.encoding_utils import *
 
 
@@ -37,3 +37,25 @@ class TestEncodingUtils(unittest.TestCase):
         for i, hex_value in enumerate(testcases):
             result = encode_base58(hex_value)
             self.assertEqual(result, expected[i])
+
+    def test_varint_encoding_decoding(self):
+        """Test that encoding and then reading a varint correctly reconstructs the integer."""
+        test_cases = [
+            0xfc,               # Single byte
+            0xfd,               # Two bytes
+            0x1234,             # Two bytes
+            0x10000,            # Four bytes
+            0x87654321,         # Four bytes
+            0x100000000,        # Eight bytes
+            0xabcdef1234567890, # Eight bytes
+        ]
+
+        for num in test_cases:
+            with self.subTest(num=num):
+                encoded = encode_varint(num)
+                decoded = read_varint(BytesIO(encoded))
+                self.assertEqual(decoded, num)
+
+        # Test ValueError for overly large integers
+        with self.assertRaises(ValueError):
+            encode_varint(0x10000000000000000)  # Greater than 8 bytes

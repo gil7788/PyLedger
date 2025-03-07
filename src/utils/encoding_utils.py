@@ -2,16 +2,12 @@ import hashlib
 from Crypto.Hash import RIPEMD160
 
 
+# Hash
 def ripemd160_hash(data: bytes) -> str:
     """Compute the RIPEMD-160 hash of the input data securely."""
     h = RIPEMD160.new()
     h.update(data)
     return h.hexdigest()
-
-# Example usage
-data = b"Secure RIPEMD-160 in Python"
-hashed_value = ripemd160_hash(data)
-print("RIPEMD-160 Hash:", hashed_value)
 
 
 def hash256(s):
@@ -24,7 +20,7 @@ def hash160(s):
     hash_bytes = bytes.fromhex(hash_str)
     return hash_bytes
 
-
+# Encoding
 def encode_base58_checksum(b):
     return encode_base58(b + hash256(b)[:4])
 
@@ -63,3 +59,31 @@ def little_endian_to_int(le_bytes):
 
 def int_to_little_endian(val, length):
     return val.to_bytes(length, 'little')
+
+
+# Stream Encoding
+def read_varint(s):
+    '''read_varint reads a variable integer from a stream'''
+    i = s.read(1)[0]
+    if i == 0xfd:
+        return little_endian_to_int(s.read(2))
+    elif i == 0xfe:
+        return little_endian_to_int(s.read(4))
+    elif i == 0xff:
+        return little_endian_to_int(s.read(8))
+    else:
+        return i
+
+
+def encode_varint(val):
+    if val < 253:
+        return int_to_little_endian(val, 1)
+    elif val < pow(2,16)-1:
+        return b'\xfd' + int_to_little_endian(val, 2)
+    elif val < pow(2,32)-1:
+        return b'\xfe' + int_to_little_endian(val, 4)
+    elif val < pow(2,64)-1:
+        return b'\xff' + int_to_little_endian(val, 8)
+    else:
+        raise ValueError('integer too large: {}'.format(val))
+

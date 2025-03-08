@@ -8,6 +8,7 @@ from src.utils.encoding_utils import (
     little_endian_to_int,
     read_varint,
 )
+
 from src.tx.op import (
     OP_CODE_FUNCTIONS,
     OP_CODE_NAMES,
@@ -159,6 +160,13 @@ class Script:
             return False
         return True
 
+    # def op_hash256(stack):
+    #     if len(stack) < 1:
+    #         return False
+    #
+    #     element = stack.pop()
+    #     stack.append(hash256(element))
+    #     return True
 
 class ScriptTest(TestCase):
 

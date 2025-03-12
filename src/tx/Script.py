@@ -160,13 +160,11 @@ class Script:
             return False
         return True
 
-    # def op_hash256(stack):
-    #     if len(stack) < 1:
-    #         return False
-    #
-    #     element = stack.pop()
-    #     stack.append(hash256(element))
-    #     return True
+
+def p2pkh_script(h160):
+    '''Takes a hash160 and returns the p2pkh ScriptPubKey'''
+    return Script([0x76, 0xa9, h160, 0x88, 0xac])
+
 
 class ScriptTest(TestCase):
 

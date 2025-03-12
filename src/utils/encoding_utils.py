@@ -1,6 +1,10 @@
 import hashlib
 from Crypto.Hash import RIPEMD160
 
+SIGHASH_ALL = 1
+SIGHASH_NONE = 2
+SIGHASH_SINGLE = 3
+
 
 # Hash
 def ripemd160_hash(data: bytes) -> str:
@@ -19,6 +23,7 @@ def hash160(s):
     hash_str = ripemd160_hash(hashlib.sha256(s).digest())
     hash_bytes = bytes.fromhex(hash_str)
     return hash_bytes
+
 
 # Encoding
 def encode_base58_checksum(b):

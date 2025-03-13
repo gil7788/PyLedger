@@ -1,9 +1,12 @@
 import hashlib
+
 from Crypto.Hash import RIPEMD160
 
 SIGHASH_ALL = 1
 SIGHASH_NONE = 2
 SIGHASH_SINGLE = 3
+WEEK_IN_SECS = 7 * 24 * 60 * 60
+TWO_WEEKS = 2 * WEEK_IN_SECS  # Ensure consistency with the book
 
 
 # Hash
@@ -91,4 +94,20 @@ def encode_varint(val):
         return b'\xff' + int_to_little_endian(val, 8)
     else:
         raise ValueError('integer too large: {}'.format(val))
+
+
+def h160_to_p2pkh_address(h160, testnet=False):
+    if testnet:
+        prefix = b'\x6f'
+    else:
+        prefix = b'\x00'
+    return encode_base58_checksum(prefix + h160)
+
+
+def h160_to_p2sh_address(h160, testnet=False):
+    if testnet:
+        prefix = b'\xc4'
+    else:
+        prefix = b'\x05'
+    return encode_base58_checksum(prefix + h160)
 

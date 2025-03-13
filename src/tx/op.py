@@ -664,7 +664,59 @@ def op_checksigverify(stack, z):
 
 
 def op_checkmultisig(stack, z):
-    raise NotImplementedError
+    if len(stack) < 1:
+        return False
+
+    # Number of public keys
+    n = decode_num(stack.pop())
+    if len(stack) < n + 1:
+        return False
+
+    sec_pubkeys = []
+    for _ in range(n):
+        sec_pubkeys.append(stack.pop())
+
+    # Ensure public keys are unique
+    if len(set(sec_pubkeys)) != n:
+        return False
+
+    # Number of required signatures
+    m = decode_num(stack.pop())
+    if len(stack) < m + 1:
+        return False
+
+    der_signatures = []
+    for _ in range(m):
+        der_signatures.append(stack.pop()[:-1])  # Remove SIGHASH byte
+
+    # Ensure signatures are unique
+    if len(set(der_signatures)) != m:
+        return False
+
+    # Off-by-one bug in Bitcoin
+    stack.pop()
+
+    try:
+        # Parse public keys and signatures
+        points = [SHA256Point.parse(sec) for sec in sec_pubkeys]
+        sigs = [Signature.parse(sig) for sig in der_signatures]
+    except (ValueError, SyntaxError):
+        return False
+
+    sig_idx = 0  # Signature index
+    for point in points:
+        if sig_idx == len(sigs):
+            break  # Stop if all signatures are validated
+        if point.verify(z, sigs[sig_idx]):
+            sig_idx += 1
+
+    # Ensure all m signatures are validated successfully
+    if sig_idx == len(sigs):
+        stack.append(encode_num(1))
+    else:
+        stack.append(encode_num(0))
+
+    return True
 
 
 def op_checkmultisigverify(stack, z):
